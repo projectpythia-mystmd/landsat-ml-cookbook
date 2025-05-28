@@ -1,0 +1,1102 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Spectral Clustering &#8212; My Jupyter Book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c54c090a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/2.0_Spectral_Clustering_PC';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Data Ingestion - General Purpose Tooling" href="1.1_Data_Ingestion-General.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">My Jupyter Book</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Landsat ML Cookbook
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="0.0_Intro_Landsat.html">Start Here - Intro to Landsat Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.0_Data_Ingestion-Geospatial.html">Data Ingestion - Geospatial-Specific Tooling</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="1.1_Data_Ingestion-General.html">Data Ingestion - General Purpose Tooling</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Workflows</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Spectral Clustering</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/2.0_Spectral_Clustering_PC.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Spectral Clustering</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#search-the-catalog">Search the catalog</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-a-dataset">Load a dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#retain-crs-attribute">Retain CRS Attribute</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reshaping-data">Reshaping Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardize-data">Standardize Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ml-pipeline">ML pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-flattening">Un-flattening</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-clustering-for-1988">Spectral Clustering for 1988</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">Load the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshape-and-standardize">Reshape and Standardize</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Spectral Clustering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unstack-and-visualize">Unstack and Visualize</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-clustering-over-time">Spectral Clustering Over Time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s next?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources-and-references">Resources and References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="spectral-clustering">
+<h1>Spectral Clustering<a class="headerlink" href="#spectral-clustering" title="Link to this heading">#</a></h1>
+<p><img alt="Spectral Clustering" src="../_images/spectral_clustering.png" /></p>
+<hr class="docutils" />
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>The current notebook will demonstrate a simplified machine learning approach to observe the change in a lake water’s extent across time. In order to identify the water, we can use spectral clustering to classify each grid cell into a category based on the similarity of the combined set of pixels across <a class="reference internal" href="0.0_Intro_Landsat.html"><span class="doc std std-doc">wavelength-bands</span></a> in our image stacks.</p>
+<p>Our example approach uses a version of spectral clustering from <a class="reference external" href="http://ml.dask.org/clustering.html#spectral-clustering">dask_ml</a> that is a scalable equivalent of what is available in <a class="reference external" href="https://scikit-learn.org/stable/modules/clustering.html#spectral-clustering">scikit-learn</a>. We will begin this approach with a single image stack and then conduct a direct comparison on the results from different time points.</p>
+<p>This workflow uses data from Microsoft Planetary Computer but it can be adapted to work with any data ingestion approach from this cookbook.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Concepts</p></th>
+<th class="head"><p>Importance</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="1.0_Data_Ingestion-Geospatial.html"><span class="std std-doc">Data Ingestion - Geospatial-Specific Tooling</span></a></p></td>
+<td><p>Necessary</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/clustering.html#spectral-clustering">scikit-learn</a></p></td>
+<td><p>Helpful</p></td>
+<td><p>Spectral clustering</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://ml.dask.org/clustering.html#spectral-clustering">dask_ml</a></p></td>
+<td><p>Helpful</p></td>
+<td><p>Spectral clustering at scale</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><strong>Time to learn</strong>: 20 minutes.</p></li>
+</ul>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">odc.stac</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">planetary_computer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystac_client</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dask.distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.extensions.eo</span><span class="w"> </span><span class="kn">import</span> <span class="n">EOExtension</span> <span class="k">as</span> <span class="n">eo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dask_ml.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralClustering</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyproj</span>
+
+<span class="c1"># Viz</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hvplot.xarray</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pystac_client</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">dask.distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">pystac.extensions.eo</span><span class="w"> </span><span class="kn">import</span> <span class="n">EOExtension</span> <span class="k">as</span> <span class="n">eo</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">dask_ml.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralClustering</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">miniconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cookbook</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.10</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">dask</span><span class="o">/</span><span class="n">distributed</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">13</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">_import_error_message</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="s2">&quot;dask.distributed is not installed.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="s2">&quot;Please either conda or pip install distributed:</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="s2">&quot;  conda install dask distributed             # either conda install</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="s1">&#39;  python -m pip install &quot;dask[distributed]&quot; --upgrade    # or pip install&#39;</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">13</span>     <span class="kn">from</span><span class="w"> </span><span class="nn">distributed</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span>     <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">msg</span> <span class="o">==</span> <span class="s2">&quot;No module named &#39;distributed&#39;&quot;</span><span class="p">:</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">miniconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cookbook</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.10</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">distributed</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">23</span>
+<span class="g g-Whitespace">     </span><span class="mi">20</span> <span class="kn">from</span><span class="w"> </span><span class="nn">dask.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>  <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_versions</span>
+<span class="ne">---&gt; </span><span class="mi">23</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed.actor</span><span class="w"> </span><span class="kn">import</span> <span class="n">Actor</span><span class="p">,</span> <span class="n">ActorFuture</span><span class="p">,</span> <span class="n">BaseActorFuture</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed.client</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="n">Client</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="n">CompatibleExecutor</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span>     <span class="n">wait</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Status</span><span class="p">,</span> <span class="n">connect</span><span class="p">,</span> <span class="n">rpc</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">miniconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cookbook</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.10</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">distributed</span><span class="o">/</span><span class="n">actor</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">13</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">NoReturn</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">from</span><span class="w"> </span><span class="nn">tornado.ioloop</span><span class="w"> </span><span class="kn">import</span> <span class="n">IOLoop</span>
+<span class="ne">---&gt; </span><span class="mi">13</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Future</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_serialize</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="kn">from</span><span class="w"> </span><span class="nn">distributed.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">LateLoopEvent</span><span class="p">,</span> <span class="n">iscoroutinefunction</span><span class="p">,</span> <span class="n">sync</span><span class="p">,</span> <span class="n">thread_state</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">miniconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cookbook</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.10</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">distributed</span><span class="o">/</span><span class="n">client</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">34</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="kn">from</span><span class="w"> </span><span class="nn">tlz</span><span class="w"> </span><span class="kn">import</span> <span class="n">first</span><span class="p">,</span> <span class="n">groupby</span><span class="p">,</span> <span class="n">merge</span><span class="p">,</span> <span class="n">partition_all</span><span class="p">,</span> <span class="n">valmap</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
+<span class="ne">---&gt; </span><span class="mi">34</span> <span class="kn">from</span><span class="w"> </span><span class="nn">dask.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">collections_to_dsk</span><span class="p">,</span> <span class="n">normalize_token</span><span class="p">,</span> <span class="n">tokenize</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="kn">from</span><span class="w"> </span><span class="nn">dask.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">validate_key</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="kn">from</span><span class="w"> </span><span class="nn">dask.highlevelgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">HighLevelGraph</span>
+
+<span class="ne">ImportError</span>: cannot import name &#39;collections_to_dsk&#39; from &#39;dask.base&#39; (/home/runner/miniconda3/envs/cookbook-dev/lib/python3.10/site-packages/dask/base.py)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="loading-data">
+<h2>Loading Data<a class="headerlink" href="#loading-data" title="Link to this heading">#</a></h2>
+<p>Let’s start by loading some Landsat data. These steps are covered in the <a class="reference internal" href="#1.0_Data_Ingestion-Planetary_Computer.ipynb"><span class="xref myst">Data Ingestion - Planetary Computer</span></a> prerequisite.</p>
+<section id="search-the-catalog">
+<h3>Search the catalog<a class="headerlink" href="#search-the-catalog" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">catalog</span> <span class="o">=</span> <span class="n">pystac_client</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+    <span class="s2">&quot;https://planetarycomputer.microsoft.com/api/stac/v1&quot;</span><span class="p">,</span>
+    <span class="n">modifier</span><span class="o">=</span><span class="n">planetary_computer</span><span class="o">.</span><span class="n">sign_inplace</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">118.89</span><span class="p">,</span> <span class="mf">38.54</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.57</span><span class="p">,</span> <span class="mf">38.84</span><span class="p">]</span>  <span class="c1"># Region over a lake in Nevada, USA</span>
+<span class="n">datetime</span> <span class="o">=</span> <span class="s2">&quot;2017-06-01/2017-09-30&quot;</span>  <span class="c1"># Summer months of 2017</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="s2">&quot;landsat-c2-l2&quot;</span>
+<span class="n">platform</span> <span class="o">=</span> <span class="s2">&quot;landsat-8&quot;</span>
+<span class="n">cloudy_less_than</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># percent</span>
+
+<span class="n">search</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;landsat-c2-l2&quot;</span><span class="p">],</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lt&quot;</span><span class="p">:</span> <span class="n">cloudy_less_than</span><span class="p">},</span> <span class="s2">&quot;platform&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">platform</span><span class="p">]}},</span>
+<span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get_all_items</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Returned </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> Items:&quot;</span><span class="p">)</span>
+<span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-a-dataset">
+<h3>Load a dataset<a class="headerlink" href="#load-a-dataset" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># select one of the results</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">assets</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">assets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span><span class="s2">&quot;eo:bands&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="n">cols_ordered</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;common_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;center_wavelength&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_width_half_max&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">bands</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">assets</span><span class="p">)[</span><span class="n">cols_ordered</span><span class="p">]</span>
+<span class="n">bands</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_2017</span> <span class="o">=</span> <span class="n">odc</span><span class="o">.</span><span class="n">stac</span><span class="o">.</span><span class="n">stac_load</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">item</span><span class="p">],</span>
+    <span class="n">bands</span><span class="o">=</span><span class="n">bands</span><span class="o">.</span><span class="n">common_name</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>  <span class="c1"># &lt;-- use Dask</span>
+<span class="p">)</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="retain-crs-attribute">
+<h3>Retain CRS Attribute<a class="headerlink" href="#retain-crs-attribute" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epsg</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;proj:epsg&quot;</span><span class="p">]</span>
+<span class="n">ds_2017</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;crs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;epsg:</span><span class="si">{</span><span class="n">epsg</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da_2017</span> <span class="o">=</span> <span class="n">ds_2017</span><span class="o">.</span><span class="n">to_array</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">)</span>
+<span class="n">da_2017</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="reshaping-data">
+<h2>Reshaping Data<a class="headerlink" href="#reshaping-data" title="Link to this heading">#</a></h2>
+<p>The shape of our data is currently <code class="docutils literal notranslate"><span class="pre">n_bands</span></code>, <code class="docutils literal notranslate"><span class="pre">n_y</span></code>, <code class="docutils literal notranslate"><span class="pre">n_x</span></code>. In order for dask-ml / scikit-learn to consume our data, we’ll need to reshape our image stacks into <code class="docutils literal notranslate"><span class="pre">n_samples,</span> <span class="pre">n_features</span></code>, where <code class="docutils literal notranslate"><span class="pre">n_features</span></code> is the number of wavelength-bands and <code class="docutils literal notranslate"><span class="pre">n_samples</span></code> is the total number of pixels in each wavelength-band image. Essentially, we’ll be creating a vector of pixels out of each image, where each pixel has multiple features (bands), but the ordering of the pixels is no longer relevant to the computation.</p>
+<p>By using xarray methods to flatten the data, we can keep track of the coordinate labels ‘x’ and ‘y’ along the way. This means that we have the ability to reshape back to our original array at any time with no information loss!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flattened_xda</span> <span class="o">=</span> <span class="n">da_2017</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">))</span>  <span class="c1"># flatten each band</span>
+<span class="n">flattened_t_xda</span> <span class="o">=</span> <span class="n">flattened_xda</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;band&quot;</span><span class="p">)</span>
+<span class="n">flattened_t_xda</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="standardize-data">
+<h2>Standardize Data<a class="headerlink" href="#standardize-data" title="Link to this heading">#</a></h2>
+<p>Now that we have the data in the correct shape, let’s standardize (or rescale) the values of the data. We do this to get all the flattened image vectors onto a common scale while preserving the differences in the ranges of values. Again, we’ll demonstrate doing this first in NumPy and then xarray.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">rescaled_xda</span> <span class="o">=</span> <span class="p">(</span><span class="n">flattened_t_xda</span> <span class="o">-</span> <span class="n">flattened_t_xda</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">flattened_t_xda</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">rescaled_xda</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition alert alert-info">
+    <p class="admonition-title" style="font-weight:bold">Info</p>
+    Above, we are using a context manager "with xr.set_options(keep_attrs=True):" to retain the array's attributes through the operations. That is, we want any metadata like 'crs' to stay with our result so we can use 'geo=True' in our plotting.
+</div><p>As <code class="docutils literal notranslate"><span class="pre">rescaled_xda</span></code> is still a Dask object, if we wanted to actually run the rescaling at this point (provided that all the data can fit into memory), we would use <code class="docutils literal notranslate"><span class="pre">rescaled_xda.compute()</span></code>.</p>
+</section>
+<section id="ml-pipeline">
+<h2>ML pipeline<a class="headerlink" href="#ml-pipeline" title="Link to this heading">#</a></h2>
+<p>Now that our data is in the proper shape and value range, we are ready to conduct spectral clustering. Here we will use a version of <a class="reference external" href="https://ml.dask.org/modules/generated/dask_ml.cluster.SpectralClustering.html">spectral clustering from dask_ml</a> that is a scalable equivalent to operations from Scikit-learn that cluster pixels based on similarity (across all wavelength-bands, which makes it spectral clustering by spectra!)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we will compute and persist the rescaled data to feed into the ML pipeline. Notice that our <code class="docutils literal notranslate"><span class="pre">X</span></code> matrix below has the shape: <code class="docutils literal notranslate"><span class="pre">n_samples,</span> <span class="pre">n_features</span></code> as discussed earlier.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">persist</span><span class="p">(</span><span class="n">rescaled_xda</span><span class="p">)</span>
+<span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>First we will set up the model with the number of clusters, and other options.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SpectralClustering</span><span class="p">(</span>
+    <span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">kmeans_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;init_max_iter&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+    <span class="n">persist_embedding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>This next step is the slow part.</strong> We’ll fit the model to our matrix <code class="docutils literal notranslate"><span class="pre">X</span></code>. Depending on your setup, it could take seconds to minutes to run depending on the size of our data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">time</span> clf.fit(X)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s check the shape of the result:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">assign_labels_</span><span class="o">.</span><span class="n">labels_</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">labels</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The result is a single vector of cluster labels.</p>
+</section>
+<section id="un-flattening">
+<h2>Un-flattening<a class="headerlink" href="#un-flattening" title="Link to this heading">#</a></h2>
+<p>Once the computation is done, we can use the coordinates of our input array to restack our output array back into an image. Again, one of the main benefits of using <code class="docutils literal notranslate"><span class="pre">xarray</span></code> for this stacking and unstacking is that it keeps track of the coordinate information for us.</p>
+<p>Since the original array is n_samples by n_features (90000, 6) and the cluster label output is (90000,), we just need the coordinates from one of the original features in the shape of n_samples. We can just copy the coordinates from the first input feature and populate is with our output data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">=</span> <span class="n">flattened_t_xda</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">output_array</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">output_array</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>With this new output array with coordinates copied from the input array, we can unstack back to the original <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> image dimensions by just using <code class="docutils literal notranslate"><span class="pre">.unstack()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unstacked_2017</span> <span class="o">=</span> <span class="n">output_array</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+<span class="n">unstacked_2017</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we can visualize the results! By hovering over the resulting imge, we can see that the lake water has been clustered with a certain label or ‘value’.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_plot_2017</span> <span class="o">=</span> <span class="n">da_2017</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">band</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">hvplot</span><span class="o">.</span><span class="n">image</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">datashade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;greys&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Raw Image 2017&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">result_plot_2017</span> <span class="o">=</span> <span class="n">unstacked_2017</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set3&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Spectral Clustering 2017&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">raw_plot_2017</span> <span class="o">+</span> <span class="n">result_plot_2017</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="spectral-clustering-for-1988">
+<h2>Spectral Clustering for 1988<a class="headerlink" href="#spectral-clustering-for-1988" title="Link to this heading">#</a></h2>
+<p>We have conducted the spectral clustering for 2017 and now we want to compare this result to the lake in 1988. Let’s load data from 1988 and run the same analysis as above.</p>
+<p>We will use the same catalog, but we will search it for a different point in time and different Landsat mission</p>
+<section id="load-the-data">
+<h3>Load the data<a class="headerlink" href="#load-the-data" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">118.89</span><span class="p">,</span> <span class="mf">38.54</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.57</span><span class="p">,</span> <span class="mf">38.84</span><span class="p">]</span>  <span class="c1"># Region over a lake in Nevada, USA</span>
+<span class="n">datetime</span> <span class="o">=</span> <span class="s2">&quot;1988-06-01/1988-09-30&quot;</span>  <span class="c1"># Summer months of 1988</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="s2">&quot;landsat-c2-l2&quot;</span>
+<span class="n">platform</span> <span class="o">=</span> <span class="s2">&quot;landsat-5&quot;</span>  <span class="c1"># Searching through an earlier landsat mission</span>
+<span class="n">cloudy_less_than</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># percent</span>
+
+<span class="n">search</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;landsat-c2-l2&quot;</span><span class="p">],</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lt&quot;</span><span class="p">:</span> <span class="n">cloudy_less_than</span><span class="p">},</span> <span class="s2">&quot;platform&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">platform</span><span class="p">]}},</span>
+<span class="p">)</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get_all_items</span><span class="p">()</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># select one of the results</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that Landsat 5 data from 1988 has slightly different spectra than Landsat 8 from 2017. Details like this are important to keep in mind when performing analyses that directly compare across missions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">assets</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">assets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span><span class="s2">&quot;eo:bands&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="n">cols_ordered</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;common_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;center_wavelength&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_width_half_max&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">bands</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">assets</span><span class="p">)[</span><span class="n">cols_ordered</span><span class="p">]</span>
+<span class="n">bands</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_1988</span> <span class="o">=</span> <span class="n">odc</span><span class="o">.</span><span class="n">stac</span><span class="o">.</span><span class="n">stac_load</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">item</span><span class="p">],</span>
+    <span class="n">bands</span><span class="o">=</span><span class="n">bands</span><span class="o">.</span><span class="n">common_name</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>  <span class="c1"># &lt;-- use Dask</span>
+<span class="p">)</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">epsg</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;proj:epsg&quot;</span><span class="p">]</span>
+<span class="n">ds_1988</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;crs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;epsg:</span><span class="si">{</span><span class="n">epsg</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="n">da_1988</span> <span class="o">=</span> <span class="n">ds_1988</span><span class="o">.</span><span class="n">to_array</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">)</span>
+<span class="n">da_1988</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reshape-and-standardize">
+<h3>Reshape and Standardize<a class="headerlink" href="#reshape-and-standardize" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flattened_xda</span> <span class="o">=</span> <span class="n">da_1988</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">))</span>
+<span class="n">flattened_t_xda</span> <span class="o">=</span> <span class="n">flattened_xda</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;band&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">rescaled_xda</span> <span class="o">=</span> <span class="p">(</span><span class="n">flattened_t_xda</span> <span class="o">-</span> <span class="n">flattened_t_xda</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">flattened_t_xda</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">rescaled_xda</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>Spectral Clustering<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">persist</span><span class="p">(</span><span class="n">rescaled_xda</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">SpectralClustering</span><span class="p">(</span>
+    <span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">kmeans_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;init_max_iter&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+    <span class="n">persist_embedding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">time</span> clf.fit(X)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">assign_labels_</span><span class="o">.</span><span class="n">labels_</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">labels</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="unstack-and-visualize">
+<h3>Unstack and Visualize<a class="headerlink" href="#unstack-and-visualize" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">=</span> <span class="n">flattened_t_xda</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">output_array</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">unstacked_1988</span> <span class="o">=</span> <span class="n">output_array</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unstacked_1988</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_plot_1988</span> <span class="o">=</span> <span class="n">da_1988</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">band</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">hvplot</span><span class="o">.</span><span class="n">image</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">datashade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;greys&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Raw 1988&quot;</span>
+<span class="p">)</span>
+
+<span class="n">result_plot_1988</span> <span class="o">=</span> <span class="n">unstacked_1988</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set3&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Spectral Clustering 1988&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">raw_plot_1988</span> <span class="o">+</span> <span class="n">result_plot_1988</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="spectral-clustering-over-time">
+<h2>Spectral Clustering Over Time<a class="headerlink" href="#spectral-clustering-over-time" title="Link to this heading">#</a></h2>
+<p>Our hypothesis is that the lake’s area is receding over time and so we want to visualize the potential change. Let’s first visually compare the plot of the clustering results from the different time points.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_plot_1988</span> <span class="o">+</span> <span class="n">result_plot_2017</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>By hovering over the lake in each image, we can see that the water was labeled (‘value’) with a certain cluster number in both images. We will programmatically grab the water cluster value from the middle of the lake using pyproj to convert from longtitude/latitude coordinates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lon_lake_center</span> <span class="o">=</span> <span class="o">-</span><span class="mf">118.71</span>
+<span class="n">lat_lake_center</span> <span class="o">=</span> <span class="mf">38.7</span>
+
+<span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">unstacked_1988</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+<span class="n">lake_center_x</span><span class="p">,</span> <span class="n">lake_center_y</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">lon_lake_center</span><span class="p">,</span> <span class="n">lat_lake_center</span><span class="p">)</span>
+
+<span class="n">water_cluster_1988</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unstacked_1988</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">lake_center_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">lake_center_y</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">))</span>
+<span class="n">water_cluster_2017</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unstacked_2017</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">lake_center_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">lake_center_y</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;water cluster values:&#39;</span><span class="p">,</span> <span class="n">water_cluster_1988</span><span class="p">,</span> <span class="n">water_cluster_2017</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s set any value that isn’t our water cluster label to 0.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">water_1988</span> <span class="o">=</span> <span class="p">(</span><span class="n">unstacked_1988</span> <span class="o">==</span> <span class="n">water_cluster_1988</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">water_2017</span> <span class="o">=</span> <span class="p">(</span><span class="n">unstacked_2017</span> <span class="o">==</span> <span class="n">water_cluster_2017</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">water_1988_plot</span> <span class="o">=</span> <span class="n">water_1988</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;greys&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;1988 Water&quot;</span>
+<span class="p">)</span>
+
+<span class="n">water_2017_plot</span> <span class="o">=</span> <span class="n">water_2017</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;greys&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;2017 Water&quot;</span>
+<span class="p">)</span>
+
+<span class="n">water_1988_plot</span> <span class="o">+</span> <span class="n">water_2017_plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can take the difference of these water label arrays to see exactly where the water levels has changed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">water_diff</span> <span class="o">=</span> <span class="n">water_1988</span> <span class="o">-</span> <span class="n">water_2017</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Red pixels (array value ‘1’) of our image below are where water was lost from 1988 to 2017.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">water_diff</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;long&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Water Change 1988-2017&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We did it! We are observing the change in the lake shoreline over time using a simple spectral clustering approach.</p>
+<p>Let’s finish things off by adding some geo tiles as a background. To only display the colored pixels overlaid on geo tiles, we could either set the array’s background value (‘0’) to ‘Not a Number’ (NaN), or we could just inform hvPlot that we want the background valued pixels to be transparent with <code class="docutils literal notranslate"><span class="pre">.redim.nodata(value=0)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">water_diff</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Water Loss from 1988 to 2017&quot;</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;ESRI&quot;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">redim</span><span class="o">.</span><span class="n">nodata</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Starting from raw Landsat data, we have used a simple spectral clustering approach to observe the change in a lake water’s extent across time.</p>
+<section id="what-s-next">
+<h3>What’s next?<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h3>
+<p>Adapt this notebook for your own use case or select another workflow example notebook.</p>
+</section>
+</section>
+<section id="resources-and-references">
+<h2>Resources and References<a class="headerlink" href="#resources-and-references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Authored by Demetris Roumis circa Jan, 2023</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="1.1_Data_Ingestion-General.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data Ingestion - General Purpose Tooling</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#search-the-catalog">Search the catalog</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-a-dataset">Load a dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#retain-crs-attribute">Retain CRS Attribute</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reshaping-data">Reshaping Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardize-data">Standardize Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ml-pipeline">ML pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-flattening">Un-flattening</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-clustering-for-1988">Spectral Clustering for 1988</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">Load the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshape-and-standardize">Reshape and Standardize</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Spectral Clustering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unstack-and-visualize">Unstack and Visualize</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-clustering-over-time">Spectral Clustering Over Time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s next?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources-and-references">Resources and References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
